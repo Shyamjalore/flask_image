@@ -1,0 +1,139 @@
+body {
+    font-family: Arial, sans-serif;
+}
+
+h1 {
+    text-align: center;
+}
+.button{
+    margin-top: 10px;
+    margin-left: 20px;
+}
+.button :hover{
+    color: cornsilk;
+    background-color: cadetblue;
+    border-radius: 10px;
+}
+
+.gallery {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    columns: 3;
+}
+
+.card {
+    border: 1px solid #ccc;
+    margin-top: 10rem;
+    padding: 10rem;
+    text-align: center;
+    justify-content: center;
+    width: 18rem;
+}
+
+.card img {
+    width: 60%;
+    height: auto;
+    columns: 3;
+}
+
+
+
+
+*{
+    margin: 0;
+    padding: 0;
+}
+
+
+.form-control{
+    border: 0 !important;
+    border-radius: 30px !important;
+    margin:auto;
+    box-shadow: none !important;  
+}
+
+
+
+.feature-img img{
+    height: 300px;
+
+}
+
+
+.gallery-box img{
+    width: 100%;
+    height: 250px;
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: rgba(57, 192, 237, 0.2);
+    transition: transform 1s;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.gallery-box :hover{
+    transform: translate( -10px 10px);
+}
+
+.gallery-box{
+    position: relative;
+    margin-bottom: 30px;
+    background-color: rgba(57, 192, 237, 0.2);
+}
+
+
+body {
+    font-family: system-ui;
+    background: #eee;
+    text-align: center;
+  }
+  
+  /*------------------------------------------------------------------
+  [ Screen Sizes] */
+  
+  
+  /* Extra small devices (phones, 600px and down) */
+  @media only screen and (max-width: 600px) {
+  
+      .site-footer {
+          height: 620px;
+          bottom: 0; 
+      }
+  
+      .site-footer .grid-container {
+          display: grid;
+          grid-template-columns: 300px;
+      }
+  
+      .site-footer .grid-container .inner-grid-container {
+          display: grid;
+          grid-template-columns: auto auto ;
+          /* text-align: center;  */
+      }
+  
+  
+  }
+  
+  /*========================================================*/
+  
+  /* Large devices (laptops/desktops, 992px and up) */
+  @media only screen and (min-width: 992px) {
+  
+      .site-footer {
+          height: 260px;
+          bottom: 0;
+      }
+  
+      .site-footer .grid-container {
+          display: grid;
+          grid-template-columns: 350px auto 350px;
+      }
+  
+      .site-footer .grid-container .inner-grid-container{
+          display: grid;
+          grid-template-columns: auto auto auto auto;
+          text-align: left;
+      }
+  
+  }
+  
+  

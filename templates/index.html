@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Welcome to Our Site</h1>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('index') }}">Home</a></li>
+                <li><a href="{{ url_for('photos') }}">Photos</a></li>
+                <li><a href="{{ url_for('admin') }}">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% for section in sections %}
+            <section>
+                <h2>{{ section.section_name }}</h2>
+                <p>{{ section.content }}</p>
+                {% if loop.index == 1 %}
+                    {% if photos|length > 0 %}
+                        <img src="{{ url_for('serve_photo', photo_id=photos[0]._id) }}" alt="Section 1 Image">
+                    {% endif %}
+                {% elif loop.index == 2 %}
+                    {% if photos|length > 1 %}
+                        <img src="{{ url_for('serve_photo', photo_id=photos[1]._id) }}" alt="Section 2 Image">
+                    {% endif %}
+                {% endif %}
+            </section>
+        {% endfor %}
+    </main>
+
+    <footer>
+        <p>&copy; 2024 My Website</p>
+    </footer>
+</body>
+</html>
