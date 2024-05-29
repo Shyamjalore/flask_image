@@ -3,13 +3,26 @@ from pymongo import MongoClient
 from bson import ObjectId
 from werkzeug.utils import secure_filename
 import os
+from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
 
 app = Flask(__name__)
 app.config.from_object('config.Config')
 
 # Setup MongoDB
 client = MongoClient(app.config['MONGO_URI'])
-db = client.get_default_database('image_database')
+db = client.get_default_database('mimage_database')
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+login_manager.login_view = 'login'
+
+class Admin(UserMixin):
+    def __init__(self, id):
+        self.id = id
+
+@login_manager.user_loader
+def load_user(user_id):
+    return Admin(user_id)
 
 @app.route('/')
 def index():
@@ -17,12 +30,93 @@ def index():
     photos = list(db.photos.find())
     return render_template('index.html', sections=sections, photos=photos)
 
+
+@app.route('/submit_form', methods=['POST'])
+def submit_form():
+    if request.method == 'POST':
+        name = request.form['name']
+        address = request.form['address']
+        email = request.form['email']
+        mobilenumber = request.form['mobilenumber']
+        hobby = request.form['hobby']
+        
+        db.volunteers.insert_one({
+            'name': name,
+            'address': address,
+            'email': email,
+            'mobilenumber': mobilenumber,
+            'hobby': hobby
+        })
+        
+    flash('Your form is successfully submitted')
+    return redirect(url_for('index'))
+    
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        
+        # Check credentials (In a real app, use a database and hashed passwords)
+        if username == 'admin' and password == 'password':
+            user = Admin(id=1)
+            login_user(user)
+            return redirect(url_for('admin'))
+        else:
+            flash('Invalid username or password')
+            
+    return render_template('login.html')
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('login'))
+
+@app.route('/admin/volunteer')
+@login_required
+def admin_volunteer():
+    volunteers = list(db.volunteers.find())
+    return render_template('admin_volunteer.html', volunteers=volunteers)
+
+@app.route('/edit/<volunteer_id>', methods=['GET', 'POST'])
+@login_required
+def edit_volunteer(volunteer_id):
+    if request.method == 'POST':
+        name = request.form['name']
+        address = request.form['address']
+        email = request.form['email']
+        mobilenumber = request.form['mobilenumber']
+        hobby = request.form['hobby']
+        
+        db.volunteers.update_one(
+            {'_id': ObjectId(volunteer_id)},
+            {'$set': {
+                'name': name,
+                'address': address,
+                'email': email,
+                'mobilenumber': mobilenumber,
+                'hobby': hobby
+            }}
+        )
+        return redirect(url_for('admin_volunteer'))
+    
+    volunteer = db.volunteers.find_one({'_id': ObjectId(volunteer_id)})
+    return render_template('edit_volunteer.html', volunteer=volunteer)
+
+@app.route('/admin/delete/<volunteer_id>', methods=['POST'])
+@login_required
+def delete_volunteer(volunteer_id):
+    db.volunteers.delete_one({'_id': ObjectId(volunteer_id)})
+    return redirect(url_for('admin_volunteer'))
+
 @app.route('/photos')
 def photos():
     photos = list(db.photos.find())
     return render_template('photos.html', photos=photos)
 
 @app.route('/admin', methods=['GET', 'POST'])
+@login_required
 def admin():
     if request.method == 'POST':
         if 'photo' in request.files:
