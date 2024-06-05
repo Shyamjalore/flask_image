@@ -4,9 +4,22 @@ from bson import ObjectId
 from werkzeug.utils import secure_filename
 import os
 from flask_login import LoginManager, UserMixin, login_user, logout_user, current_user, login_required
+from flask_mail import Mail
 
 app = Flask(__name__)
 app.config.from_object('config.Config')
+
+
+app.config.update(
+    MAIL_SERVER = 'smtp.gmail.com',
+    MAIL_PORT = 587,
+    MAIL_USE_TLS = True,
+    MAIL_USE_SSL = False,
+    MAIL_USERNAME = 'beingmanish35@gmail.com',
+    MAIL_PASSWORD = 'wbiq lobk jhhz kocu'
+    
+)
+mail = Mail(app)
 
 # Setup MongoDB
 client = MongoClient(app.config['MONGO_URI'])
@@ -47,6 +60,11 @@ def submit_form():
             'mobilenumber': mobilenumber,
             'hobby': hobby
         })
+        mail.send_message('New message from ' + name,
+                          sender=email,
+                          recipients = ['beingmanish35@gmail.com'],
+                          body = address + "\n" + hobby  + "\n" + mobilenumber
+                          )
         
     flash('Your form is successfully submitted')
     return redirect(url_for('index'))
@@ -57,7 +75,7 @@ def login():
         username = request.form['username']
         password = request.form['password']
         
-        # Check credentials (In a real app, use a database and hashed passwords)
+        
         if username == 'admin' and password == 'password':
             user = Admin(id=1)
             login_user(user)
@@ -155,4 +173,4 @@ def serve_photo(photo_id):
     return app.response_class(photo['data'], mimetype=photo['content_type'])
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug = True)

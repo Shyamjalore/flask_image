@@ -13,20 +13,36 @@
             <li><a href="{{ url_for('logout') }}">Logout</a></li>
         </ul>
     </nav>
-    <ul>
-        {% for volunteer in volunteers %}
-        <li>
-            <strong>Name:</strong> {{ volunteer.name }}<br>
-            <strong>Address:</strong> {{ volunteer.address }}<br>
-            <strong>Email:</strong> {{ volunteer.email }}<br>
-            <strong>Mobile Number:</strong> {{ volunteer.mobilenumber }}<br>
-            <strong>Hobby:</strong> {{ volunteer.hobby }}<br>
-            <a href="{{ url_for('edit_volunteer', volunteer_id=volunteer._id) }}">Edit</a>
-            <form action="{{ url_for('delete_volunteer', volunteer_id=volunteer._id) }}" method="POST" style="display:inline;">
-                <button type="submit">Delete</button>
-            </form>
-        </li>
-        {% endfor %}
-    </ul>
+
+    <table>
+        <thead>
+            <tr>
+                <th scope="col"><strong> Name </strong></th>
+                <th scope="col"><strong> Address </strong></th>
+                <th scope="col"><strong> Email </strong></th>
+                <th class="col"><strong> Mobile NUmber </strong></th>
+                <th class="col"><strong> Hobby </strong></th>
+                <th class="col"><strong> Delete </strong></th>
+                <th class="col"><strong> Edit </strong></th>
+            </tr>
+        </thead>
+        
+        <tbody>
+            {% for volunteer in volunteers %}
+            <tr>
+                <td> {{ volunteer.name }}<br> </td>
+                <td> {{ volunteer.address }}<br> </td>
+                <td> {{ volunteer.email }}<br> </td>
+                <td> {{ volunteer.mobilenumber }}<br> </td>
+                <td> {{ volunteer.hobby }}<br> </td>
+                <td><a href="{{ url_for('edit_volunteer', volunteer_id=volunteer._id) }}">Edit</a> </td>
+                <td><form action="{{ url_for('delete_volunteer', volunteer_id=volunteer._id) }}" method="POST" style="display:inline;">
+                    <button type="submit">Delete</button>
+                </form></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </body>
 </html>
+

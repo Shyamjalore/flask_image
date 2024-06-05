@@ -21,19 +21,19 @@
     <form action="{{ url_for('submit_form') }}" method="POST">
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required>
-        <br> <hr>
+        <br> <br>
         <label for="address">Address:</label>
         <input type="text" id="address" name="address" required>
-        <br> <hr>
+        <br> 
         <label for="email">Email:</label>
         <input type="email" id="email" name="email" required>
-        <br> <hr>
+        <br> 
         <label for="mobilenumber">Mobile Number:</label>
         <input type="text" id="mobilenumber" name="mobilenumber" required>
-        <br> <hr>
+        <br> 
         <label for="hobby">Hobby:</label>
         <input type="text" id="hobby" name="hobby" required>
-        <br> <hr>
+        <br> 
         <button type="submit">Submit</button>
     </form>
     {% with messages = get_flashed_messages() %}
